@@ -1,41 +1,74 @@
-def scytale_encrypt(plaintext, key):
+#!/usr/bin/env python3
 
-    plaintext = ''.join(plaintext.upper().split())
-    
-    # Calcul du nombre de colonnes nécessaires
-    # Le nombre de colonnes est égal à la longueur du texte divisée par la clé (arrondi au supérieur)
-    columns = (len(plaintext) + key - 1) // key
-    
-    # Remplissage avec des X si nécessaire
-    plaintext += 'X' * (columns * key - len(plaintext))
-    
-    # Construction de la matrice
-    matrix = []
-    for i in range(0, len(plaintext), columns):
-        matrix.append(plaintext[i:i+columns])
-    
-    # Lecture par colonnes pour obtenir le texte chiffré
-    ciphertext = ""
-    for j in range(columns):
-        for i in range(key):
-            ciphertext += matrix[i][j]
-    
-    return ciphertext
+import caesarscript
+import scytale
+import polybius
+import affine
+import vigenere
 
-def scytale_decrypt(ciphertext, key):
-   
-    columns = len(ciphertext) // key
-    
-    
-    matrix = [[''] * columns for _ in range(key)]
 
-    index = 0
-    for j in range(columns):
-        for i in range(key):
-            matrix[i][j] = ciphertext[index]
-            index += 1
-    plaintext = ""
-    for row in matrix:
-        plaintext += ''.join(row)
-    
-    return plaintext
+def test_caesar():
+    print("\n=== TEST DU CHIFFREMENT DE CÉSAR ===")
+    texte_clair = "HELLO"
+    decalage = 3
+    print(f"Texte original : {texte_clair}")
+    print(f"Décalage : {decalage}")
+
+    chiffre = caesarscript.caesar_encrypt(texte_clair, decalage)
+    print(f"Texte chiffré : {chiffre}")
+
+    dechiffre = caesarscript.caesar_decrypt(chiffre, decalage)
+    print(f"Texte déchiffré : {dechiffre}")
+
+
+def test_scytale():
+    print("\n=== TEST DU CHIFFREMENT SCYTALE ===")
+    texte_clair = "THISISASECRETMESSAGE"
+    cle = 4  # Nombre de tours autour de la scytale
+    print(f"Texte original : {texte_clair}")
+    print(f"Clé (nombre de tours) : {cle}")
+
+    chiffre = scytale.scytale_encrypt(texte_clair, cle)
+    print(f"Texte chiffré : {chiffre}")
+
+    dechiffre = scytale.scytale_decrypt(chiffre, cle)
+    print(f"Texte déchiffré : {dechiffre}")
+
+
+def test_polybius():
+    print("\n=== TEST DU CARRÉ DE POLYBE ===")
+    texte_clair = "HELLO"
+    print(f"Texte original : {texte_clair}")
+
+    chiffre = polybius.polybius_encrypt(texte_clair)
+    print(f"Texte chiffré : {chiffre}")
+
+    dechiffre = polybius.polybius_decrypt(chiffre)
+    print(f"Texte déchiffré : {dechiffre}")
+
+
+def test_affine():
+    print("\n=== TEST DU CHIFFREMENT AFFINE ===")
+    texte_clair = "HELLO"
+    a, b = 5, 8  # Paramètres pour le chiffrement affine (a doit être premier avec 26)
+    print(f"Texte original : {texte_clair}")
+    print(f"Paramètres : a={a}, b={b}")
+
+    chiffre = affine.affine_encrypt(texte_clair, a, b)
+    print(f"Texte chiffré : {chiffre}")
+
+    dechiffre = affine.affine_decrypt(chiffre, a, b)
+    print(f"Texte déchiffré : {dechiffre}")
+
+
+def test_vigenere():
+    print("\n=== TEST DU CHIFFREMENT DE VIGENÈRE ===")
+    texte_clair = "HELLOWORLD"
+    cle = "KEY"
+    print(f"Texte original : {texte_clair}")
+    print(f"Clé : {cle}")
+
+    chiffre = vigenere.vigenere_encrypt(texte_clair, cle)
+    print(f"Texte chiffré : {chiffre}")
+
+    dechiffre = vigenere
